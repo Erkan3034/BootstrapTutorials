@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trivia Quiz: Mind Challenge</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background: linear-gradient(135deg, #206a9b, #ca1e0a);
+  overflow: hidden;
+}
+
+#game-container {
+  text-align: center;
+  position: relative;
+  width: 350px;
+  border-radius: 5%;
+  box-shadow: 5px 5px 15px rgb(255, 255, 255);
+}
+
+#question-container {
+  margin-bottom: 20px;
+}
+
+#answer-container {
+  margin-top: 10px;
+}
+
+.form-label {
+  color: #007bff; /* Blue color */
+}
+
+#answer {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  width: 200px;
+  transition: border-color 0.3s ease;
+}
+
+#answer:focus,
+#answer:hover {
+  border-color: #007bff; /* Blue color */
+}
+
+#submit {
+  margin-top: 10px;
+  padding: 10px 20px;
+  height: 35px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+}
+#submit:hover{
+    background-color: #34a4e4;
+    border-radius: 15px;
+}
+#result {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#timer-container {
+  margin-top: 20px;
+  position: relative;
+}
+
+#time-left {
+  font-size: 24px;
+}
+#start{
+    background-color: rgb(11, 94, 11);
+    color: rgb(82, 179, 179);
+    font-weight: bolder;
+    border-radius: 15% / 50%;
+    box-shadow:0px 1px 5px greenyellow;
+    width: 150px;
+    height: 60px;
+    animation: shake 0.5s linear infinite
+    
+}
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(); }
+}
+#start:hover{
+font-size: 15px;
+background-color: forestgreen;
+color: black;
+font-style: italic;
+transition-duration: 0.2s;
+}
+
+.face-icon {
+  width: 100px;
+  height: 100px;
+  margin: 20px auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.thinking {
+    opacity: 0.5;
+  background-image: url('https://emojicdn.elk.sh/🤔');
+}
+
+.happy {
+  background-image: url('https://emojicdn.elk.sh/😊');
+}
+.sad {
+  background-image: url('https://emojicdn.elk.sh/😞');
+}
+
+
+@keyframes thinking-animation {
+  0% { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.1) translateY(-10px); }
+}
+
+.question-mark {
+  position: absolute;
+  z-index: -1;
+  opacity: 0.5;
+  width: 30px;
+  height: 30px;
+  background-image: url('https://emojicdn.elk.sh/❓');
+  background-size: cover;
+  background-repeat: no-repeat;
+  animation: move-question-mark 5s linear infinite, color-change 3s infinite alternate;
+}
+
+@keyframes move-question-mark {
+  0% {
+    transform: translate(-100%, -100%);
+  }
+  100% {
+    transform: translate(200%, 200%);
+  }
+}
+
+@keyframes color-change {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+</style>
+</head>
+<body>
+<div id="game-container">
+  <h1 style="opacity: 0.5; font-style: italic; font-size: large;  ">~Knowledge Challenge~</h1>
+  <div id="question-container">
+    <p id="question">What is the capital city of Turkey?</p>
+  </div>
+  <div id="answer-container">
+    <input type="text" id="answer" placeholder="Enter your answer here..." autocomplete="off">
+  </div>
+  <button id="submit">Check</button>
+  
+  <p id="result"></p>
+  <button id="start">Start</button>
+
+  <div id="timer-container">
+    <p id="time-left"></p>
+    <div id="face-icon" class="face-icon thinking"></div>
+  </div>
+  <p id="score">Score: <span id="score-value">0</span></p>
+  <div class="question-mark"></div>
+</div>
+<script>
+    // JavaScript code here
+    // Questions and correct answers
+    const questions = [
+      { question: "What is the capital city of Turkey?", answer: "Ankara" },
+      { question: "Which is the highest mountain in Turkey?", answer: "Mount Ararat" },
+      { question: "What is the longest river in the world?", answer: "Nile River" }
+    ];
+    
+    // Select HTML elements
+    const questionElement = document.getElementById('question');
+    const answerElement = document.getElementById('answer');
+    const submitButton = document.getElementById('submit');
+    const startButton = document.getElementById('start');
+    const resultElement = document.getElementById('result');
+    const timeLeftElement = document.getElementById('time-left');
+    const scoreValueElement = document.getElementById('score-value');
+    const faceIconElement = document.getElementById('face-icon');
+    const questionMarksContainer = document.getElementById('game-container');
+    
+    // Game variables
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timeLeft = 15;
+    let timer;
+    
+    // Start button click event
+    startButton.addEventListener('click', () => {
+      startGame();
+    });
+    
+    // Start the game
+    function startGame() {
+      startButton.style.display = "none";
+      displayQuestion();
+      startTimer();
+      animateQuestionMarks();
+    }
+    
+    // When submit button is clicked
+    submitButton.addEventListener('click', () => {
+      const userAnswer = answerElement.value.trim();
+      const correctAnswer = questions[currentQuestionIndex].answer;
+    
+      // Check user's answer
+      if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+        resultElement.textContent = "Correct!";
+        score += 10;
+        faceIconElement.classList.remove('thinking', 'sad');
+        faceIconElement.classList.add('happy');
+        setTimeout(() => {
+          faceIconElement.classList.remove('happy');
+          faceIconElement.classList.add('thinking');
+        }, 2000);
+      } else {
+        resultElement.textContent = "Wrong! Correct answer: " + correctAnswer;
+        faceIconElement.classList.remove('thinking', 'happy');
+        faceIconElement.classList.add('sad');
+        setTimeout(() => {
+          faceIconElement.classList.remove('sad');
+          faceIconElement.classList.add('thinking');
+        }, 2000);
+      }
+    
+      // Update score and change question
+      updateScore();
+      setTimeout(() => {
+        resultElement.textContent = "";
+      }, 2000);
+      nextQuestion();
+    });
+    
+    // Move to next question
+    function nextQuestion() {
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        displayQuestion();
+        resetTimer();
+      } else {
+        gameOver();
+      }
+    }
+    
+    // Display question
+    function displayQuestion() {
+      questionElement.textContent = questions[currentQuestionIndex].question;
+      answerElement.value = "";
+    }
+    
+    // Update score
+    function updateScore() {
+      scoreValueElement.textContent = score;
+    }
+    
+    // Start the timer
+    function startTimer() {
+      timeLeftElement.textContent = timeLeft;
+      timer = setInterval(() => {
+        timeLeft--;
+        timeLeftElement.textContent = timeLeft;
+    
+        if (timeLeft === 0) {
+          clearInterval(timer);
+          gameOver();
+        }
+      }, 1500);
+    }
+    
+    // Reset the timer
+    function resetTimer() {
+      clearInterval(timer);
+      timeLeft = 10;
+      startTimer();
+    }
+    
+    // End the game
+    function gameOver() {
+      clearInterval(timer);
+      questionElement.textContent = "Game over!";
+      answerElement.style.display = "none";
+      submitButton.style.display = "none";
+      resultElement.textContent = "Total Score: " + score;
+      faceIconElement.style.display = "none";
+    }
+    
+    // Animate question marks
+    function animateQuestionMarks() {
+      for (let i = 0; i < 20; i++) {
+        const questionMark = document.createElement('div');
+        questionMark.classList.add('question-mark');
+        questionMarksContainer.appendChild(questionMark);
+        questionMark.style.left = `${Math.random() * 100}vw`;
+        questionMark.style.top = `${Math.random() * 100}vh`;
+        questionMark.style.animationDuration = `${Math.random() * 3 + 2}s`;
+      }
+    }
+    </script>
+</body>
+</html>

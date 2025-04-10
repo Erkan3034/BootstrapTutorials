@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sablon</title>
+    <link rel="stylesheet" href="Bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="Bootstrap/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <form action="">
+    <div class="mb-3">
+        <label for="email" class="form-label">E-Mail</label>
+        <input type="email" name="email" id="email" class="form-control " placeholder="Enter your e-mail address">
+    </div>
+
+    <div class="mb-1">
+        <label for="message" class="form-label">Message</label>
+        <textarea name="message" id="message" class="form-control" placeholder="Write something..."></textarea> 
+    </div>
+
+    <div class="mb-1">
+        <label for="name" class="form-label">Name</label>
+       <input type="text" class="form-control form-control-sm" placeholder="Enter your name...">
+    </div>
+    <div class="mb-1">
+        <label for="name" class="form-label">SurName</label>
+       <input type="text" class="form-control form-control-lg" placeholder="Enter your Surname...">
+    </div>
+    <div class="mb-1">
+        <label for="manager" class="form-label">Readonly</label>
+       <input type="text" value="Readonly form element" class="form-control form-control-lg" placeholder="Enter your Surname..." readonly>
+    </div>
+
+<h2>DATALIST Form element</h2>
+
+<div class="mb-1">
+    <label for="cities" class="form-label">Cities</label>
+   <input type="text" list="cityList" class="form-control" placeholder="Type...">
+   <datalist id="cityList">
+
+    <option value="London">London</option>
+    <option value="Paris">Paris</option>
+    <option value="New York">New York</option>
+   </datalist>
+   
+</div>
+<hr><h4>SELECTION</h4>
+<div class="container mt-5">
+    <label for="cities" class="form-label">Cities</label>
+
+        <select class="form-select form-select-sm">
+          <option selected disabled>Select a city</option>
+          <option value="Istanbul">Istanbul</option>
+          <option value="Ankara">Ankara</option>
+          <option value="Izmir">Izmir</option>
+          <option value="Bursa">Bursa</option>
+          <option value="Antalya">Antalya</option>
+          <option value="Adana">Adana</option>
+          <option value="Konya">Konya</option>
+          <option value="Gaziantep">Gaziantep</option>
+          <option value="Eskisehir">Eskisehir</option>
+          <option value="Diyarbakir">Diyarbakir</option>
+          <option value="Kayseri">Kayseri</option>
+          <option value="Mersin">Mersin</option>
+          <option value="Samsun">Samsun</option>
+          <option value="Denizli">Denizli</option>
+          <option value="Izmit">Izmit</option>
+        </select>
+  </div>
+
+  <hr><h4>Multiple selection</h4>
+
+  <div class="container mt-5">
+    <label for="cities" class="form-label">Cities</label>
+
+    <select class="form-select form-select-sm" multiple>
+      <option selected disabled>Select a city</option>
+      <option value="Istanbul">Istanbul</option>
+      <option value="Ankara">Ankara</option>
+      <option value="Izmir">Izmir</option>
+      <option value="Bursa">Bursa</option>
+      <option value="Antalya">Antalya</option>
+      <option value="Adana">Adana</option>
+      <option value="Konya">Konya</option>
+      <option value="Gaziantep">Gaziantep</option>
+      <option value="Eskisehir">Eskisehir</option>
+      <option value="Diyarbakir">Diyarbakir</option>
+      <option value="Kayseri">Kayseri</option>
+      <option value="Mersin">Mersin</option>
+      <option value="Samsun">Samsun</option>
+      <option value="Denizli">Denizli</option>
+      <option value="Izmit">Izmit</option>
+    </select>
+</div>
+
+<h1>
+    File Select
+</h1>
+
+<div class="input-group mb-3">
+    <input type="file" class="form-control" id="customFile">
+    <label class="input-group-text" for="customFile">Choose file</label>
+  </div>
+  
+  
+<!-- 
+        <button type="button" class="btn bg-gradient btn-primary ">Sent message</button>
+        <button type="reset" class="btn bg-gradient btn-danger ">Reset form</button> -->
+
+    <script src="Bootstrap/bootstrap.js"></script>
+</body>
+
+</html>
